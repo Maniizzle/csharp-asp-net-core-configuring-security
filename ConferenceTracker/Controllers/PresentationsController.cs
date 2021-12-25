@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ConferenceTracker.Controllers
 {
@@ -11,11 +12,13 @@ namespace ConferenceTracker.Controllers
     {
         private readonly IPresentationRepository _presentationRepository;
         private readonly ISpeakerRepository _speakerRepository;
+        private readonly ILogger<PresentationsController> _logger;
 
-        public PresentationsController(IPresentationRepository presentationRepository, ISpeakerRepository speakerRepository)
+        public PresentationsController(IPresentationRepository presentationRepository, ISpeakerRepository speakerRepository,ILogger<PresentationsController> logger)
         {
             _presentationRepository = presentationRepository;
             _speakerRepository = speakerRepository;
+            this._logger = logger;
         }
 
         public IActionResult Index()
@@ -66,14 +69,17 @@ namespace ConferenceTracker.Controllers
         {
             if (id == null)
             {
+                _logger.LogInformation("Presentation id was null.");
                 return NotFound();
             }
 
             var presentation = _presentationRepository.GetPresentation((int)id);
             if (presentation == null)
             {
+                _logger.LogWarning("Presentation id," + id + ", was not found.");
                 return NotFound();
             }
+            _logger.LogInformation("Presentation id, " + id + ", was found.Returning 'Edit view'");
             ViewData["SpeakerId"] = new SelectList(_speakerRepository.GetAllSpeakers(), "Id", "Id", presentation?.SpeakerId);
             return View(presentation);
         }
