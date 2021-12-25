@@ -63,17 +63,18 @@ namespace ConferenceTracker
 
             app.UseCors(_allowedOrigins);
             app.UseHttpsRedirection();
-            if (!env.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
-            else
+            if (env.IsDevelopment())
             {
                 logger.LogInformation("Environment is in development");
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+                }
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
