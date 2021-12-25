@@ -67,9 +67,10 @@ namespace ConferenceTracker.Controllers
         [Authorize(Roles = "Administrators")]
         public IActionResult Edit(int? id)
         {
+            _logger.LogInformation("Getting presentation id: " + id + " for edit.");
             if (id == null)
             {
-                _logger.LogInformation("Presentation id was null.");
+                _logger.LogError("Presentation id was null.");
                 return NotFound();
             }
 
