@@ -15,7 +15,7 @@ namespace ConferenceTracker
 {
     public class Startup
     {
-        private readonly string _allowedOrigins;
+        private readonly string _allowedOrigins= "_allowedOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -65,7 +65,6 @@ namespace ConferenceTracker
             app.UseHttpsRedirection();
             if (!env.IsDevelopment())
             {
-
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
